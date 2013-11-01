@@ -14,5 +14,6 @@ This is the documentation for Galactic Hitch-Hiking ZenPack Developers .
    cli_monitoring
    unit_testing
    gui_properties
+   git
    ansible
 

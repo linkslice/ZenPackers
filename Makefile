@@ -44,6 +44,7 @@ WIKIS = $(patsubst %.rst,%,$(SRCS))
 
 clean:
 	-rm -rf $(BUILDDIR)/*
+	-rm -rf html
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) html
