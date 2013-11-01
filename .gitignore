@@ -1,2 +1,4 @@
 doctrees
 *.doctree
+*.wiki
+*.html

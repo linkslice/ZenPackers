@@ -39,6 +39,9 @@ help:
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
+SRCS = $(wildcard *.rst)
+WIKIS = $(patsubst %.rst,%,$(SRCS))
+
 clean:
 	-rm -rf $(BUILDDIR)/*
 
@@ -48,9 +51,13 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in  $(BUILDDIR)/html."
 
-wiki:
+wiki: $(WIKIS)
+
+%: %.rst
+
 	mkdir -p $(BUILDDIR)/wiki
-	pandoc -t mediawiki  index.rst -o $(BUILDDIR)/wiki/index.wiki
+	pandoc -t mediawiki  $< -o $(BUILDDIR)/wiki/$@.wiki
+	# pandoc -t mediawiki  index.rst -o $(BUILDDIR)/wiki/index.wiki
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/wiki."
 
