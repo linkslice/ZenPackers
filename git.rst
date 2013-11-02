@@ -1,5 +1,5 @@
 ========================================================================
-Git for Very Young Gits ;}
+Git for Young Gits ;}
 ========================================================================
 
 Git is a developement version control tool. 
@@ -50,7 +50,7 @@ New Repo Workflow Scenario
   <bash>: git commit -a
   <bash>: git push
   <bash>: git status  
-    *Already up-to-date.*
+    **Already up-to-date.**
 
 
 Setting Repo Parameters
@@ -179,5 +179,9 @@ to merge develop back onto feature/forgotten::
 
 Push a new Feature up to Origin for storage:
 -----------------------------------------------------
-* git push -u origin feature/new
+Sometimes you want a feature to be stored on your Hub.
+Git Flow does not automatically push your features.
+You can push it up to the hub like this::
+
+  <bash>: git push -u origin feature/new
 

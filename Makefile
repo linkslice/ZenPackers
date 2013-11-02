@@ -45,10 +45,8 @@ WIKIS = $(patsubst %.rst,%,$(SRCS))
 
 clean:
 	-rm -rf $(BUILDDIR)/*
-	-rm -rf html
 
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) html
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in  $(BUILDDIR)/html."

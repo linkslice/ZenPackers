@@ -2,3 +2,5 @@ doctrees
 *.doctree
 *.wiki
 *.html
+build
+html
