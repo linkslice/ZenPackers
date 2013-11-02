@@ -1,5 +1,5 @@
 ==============================================================================
-Mitration Guide for Slackers
+Migration Guide for Slackers
 ==============================================================================
 
 Description
@@ -28,13 +28,15 @@ $ZP_DIR/mitrate/
 
 Migration Outline
 ------------------------------------------------------------------------------
+This migration guide is specific to a template-oriented ZenPack.
+It may not be relevant to a different type of ZP.
 
-The Basic idea behind migration is as follows:
+The Basic idea behind this migration scenario is as follows:
 
 * Identify the old zenpack objects, bound to a device.
 
    - Find all device classess and devices where "Oracle" template is bound.
-   - Look for : zDeviceTemplates that are overridden
+   - Look for all **zDeviceTemplates** that are overridden
 
 * Extract the old information from those templates
 
@@ -57,7 +59,6 @@ The Basic idea behind migration is as follows:
 
 Implementation
 --------------
-
 
 The most basic usage will involve creating a json input and then specifying a destination
 prefix for the ZenPack. The first example is for an older (2.2) migration script.

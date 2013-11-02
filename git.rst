@@ -8,18 +8,26 @@ Beginning
 ------------------------------------------------------------------------
 To just pull (download) a repository from the web:
 
-* Find the repo online and get the cone string
-* pull it down with "git clone"::
+* Find the repo online and get the clone string.
+* Copy that string.
+* pull it down with "git clone"
+::
   
-  <bash>: git clone git@github.com:zenoss/zproxy.git
+  <bash>: git clone git@github.com:zenoss/ZenPackers.git
+
+    - or for https - 
+
+  <bash>: git clone https://github.com/zenoss/ZenPackers.git
 
 Typical Workflow Scenario
 --------------------------------------------------------------
 
 Now that you have a repo, go into the repo folder.
 
-* Make any changes you want to files
 * Add any files you want
+* Make any changes you want to files
+* Commit your changes
+* Push your changes
 
 To add your new files::
 
