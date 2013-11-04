@@ -11,6 +11,7 @@ To just pull (download) a repository from the web:
 * Find the repo online and get the clone string.
 * Copy that string.
 * pull it down with "git clone"
+
 ::
   
   <bash>: git clone git@github.com:zenoss/ZenPackers.git
@@ -54,12 +55,11 @@ New Repo Workflow Scenario
 * Now start writing your code, make files......
 * Now add files to your repo and push::
 
-  <bash>: git add -A
-  <bash>: git commit -a
-  <bash>: git push
-  <bash>: git status  
-    **Already up-to-date.**
-
+   <bash>: git add -A
+   <bash>: git commit -a
+   <bash>: git push
+   <bash>: git status
+   .. Already up-to-date ..
 
 Setting Repo Parameters
 ----------------------------------------------
@@ -95,9 +95,7 @@ Now things are as before with master in its original state.
 
 * Now you want to merge from develop::
 
-
-  <bash>: git merge develop
-
+   <bash>: git merge develop
      Updating 1530600..2873dc4
      Fast-forward
      .gitignore                             |    2 +
@@ -106,11 +104,10 @@ Now things are as before with master in its original state.
 
 * Now you must push these changes up to your Hub::
 
-  <bash>: git push
-
-    Total 0 (delta 0), reused 0 (delta 0)
-    To git@github.com:zenoss/ZenPackers.git
-    1530600..2873dc4  master -> master
+   <bash>: git push
+     Total 0 (delta 0), reused 0 (delta 0)
+     To git@github.com:zenoss/ZenPackers.git
+     1530600..2873dc4  master -> master
 
 =============================================================================
 Git Flow 
@@ -129,7 +126,7 @@ Create New Features and Work Flow
 ----------------------------------
 To start a new feature::
 
-  <bash>: git flow feature start xyz:
+  <bash>: git flow feature start xyz
   <bash>: git status
    On branch feature/xyz
    nothing to commit (working directory clean)
