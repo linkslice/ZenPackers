@@ -15,6 +15,7 @@ This is the documentation for Inter-Galactic ZenPack Developers
    cli_monitoring
    unit_testing
    gui_properties
+   modeling
 
 Other Topics:
 --------------
