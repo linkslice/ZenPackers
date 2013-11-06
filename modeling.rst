@@ -76,9 +76,9 @@ off of Instance. We need two defining relation:
                     'oracle_instances',)),
          ('oracle_tablespaces',
               ToManyCont(
-                    ToOne,
-                    'ZenPacks.zenoss.DatabaseMonitor.TablesSpace.TableSpace',
-                    'instance',)),
+                  ToOne,
+                  'ZenPacks.zenoss.DatabaseMonitor.TablesSpace.TableSpace',
+                  'instance',)),
          )
 
 * In TableSpace() we need just one to define Instance -> TablesSpaces::
@@ -94,8 +94,7 @@ off of Instance. We need two defining relation:
                            'Products.ZenModel.Instance.Instance',
                            'oracle_tablespaces',
                              ),
-        ),
-    )
+        ),)
 
 Modeler Class Relations Insertion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,7 +125,7 @@ datamap::
        tablespaces = []
        for ts in ts_list:
            tablespaces.append(ObjectMap(data=dict(
-               id='{0}_{1}'.format(prepId(instance_name), prepId(ts['TABLESPACE_NAME'>
+               id='{0}_{1}'.format(instance_name, ts['TABLESPACE_NAME'])
                tablespace_name = ts['TABLESPACE_NAME'],
                tablespace_instance = instance1.get('INSTANCE_ROLE'),
                tablespace_maxbytes = ts['BYTES_MAX'],
