@@ -1,0 +1,9 @@
+---
+- hosts: watched
+  user: carinhas
+  sudo: yes
+
+  roles:
+    - { role: common }
+    - { role: nagios-client, bin_dir: '/opt/bin' }
+
