@@ -124,11 +124,16 @@ Setup Git Flow in the Existing Repo
 
 Create New Features and Work Flow
 ----------------------------------
+In features, you don't want to use version numbers because it can
+cause chaos when multiple authors work the same project. Instead
+give the version a name, and only after the resulting develop is 
+reviewed, you give it a version. (Source Unknown: Rob B).
+
 To start a new feature::
 
   <bash>: git flow feature start xyz
   <bash>: git status
-   On branch feature/xyz
+   On branch feature/xyz (don't give version #'s)
    nothing to commit (working directory clean)
    
    .... do some work ....
@@ -137,6 +142,7 @@ To start a new feature::
 
   <bash>: git commit -a 
   <bash>: git push (nothing happens)
+  - (At this point you can ask for a Pull Request or continue)
   <bash>: git flow feature finish xyz
   <bash>: git status
    On branch develop
