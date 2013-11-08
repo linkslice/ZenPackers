@@ -16,6 +16,7 @@ This is the documentation for Inter-Galactic ZenPack Developers
    unit_testing
    gui_properties
    modeling
+   zep
 
 Other Topics:
 --------------
