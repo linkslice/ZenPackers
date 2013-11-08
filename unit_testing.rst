@@ -1,5 +1,5 @@
 ==============================================================================
-The Zenpack Unit Testing Rough Guide
+Unit Testing Rough Guide
 ==============================================================================
 
 Description
@@ -340,3 +340,51 @@ so you won't be able to test it properly.
        suite.addTest(makeSuite(TestImpact))
        return suite
 
+
+Another Simple Example
+----------------------
+
+Here is another simple example that may help::
+
+   from Products.Five import zcml
+
+   from Products.ZenTestCase.BaseTestCase import BaseTestCase
+   from Products.Zuul.interfaces import IReportable
+
+   from ZenPacks.zenoss.OpenVZ.Container import Container
+
+
+   class TestAnalytics(BaseTestCase):
+       def afterSetUp(self):
+           super(TestAnalytics, self).afterSetUp()
+
+           # Required to prevent erroring out when trying to define viewlets in
+           # ../browser/configure.zcml.
+           import Products.ZenUI3.navigation
+           zcml.load_config('testing.zcml', Products.ZenUI3.navigation)
+
+           import ZenPacks.zenoss.OpenVZ
+           zcml.load_config('configure.zcml', ZenPacks.zenoss.OpenVZ)
+
+       def testContainerReportable(self):
+           device = self.dmd.Devices.createInstance('openvz_host')
+
+           container = Container('101')
+           device.openvz_containers._setObject(container.id, container)
+           container = device.openvz_containers._getOb(container.id)
+
+           reportable = IReportable(container)
+           report_properties = reportable.reportProperties()
+
+           self.assertEqual(reportable.entity_class_name, 'container')
+
+           self.assertEqual(len(report_properties), 3)
+           self.assertEqual(report_properties[0][0], 'id')
+           # .. and so on..
+
+
+   def test_suite():
+       from unittest import TestSuite, makeSuite
+       suite = TestSuite()
+       suite.addTest(makeSuite(TestAnalytics))
+       return suite
