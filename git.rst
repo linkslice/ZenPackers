@@ -109,6 +109,21 @@ Now things are as before with master in its original state.
      To git@github.com:zenoss/ZenPackers.git
      1530600..2873dc4  master -> master
 
+
+Delete Unwanted Branches
+------------------------
+If you want to eject unwanted branches from your repo,
+make sure to read the git-branch docs and the warnings about being
+fully merged (--delete option).
+
+To remove a local branch::
+
+  git branch -D <branchName>
+
+To remove a  remote branch::
+  
+  git push origin --delete <branchName>
+
 =============================================================================
 Git Flow 
 =============================================================================

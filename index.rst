@@ -3,6 +3,14 @@
 Welcome to the ZenPack Hitch-Hikers Guide!
 =============================================
 
+.. toctree::
+   :maxdepth: 2
+
+   introduction
+
+Topics for Zenpack Development
+=============================================
+
 This is the documentation for Inter-Galactic ZenPack Developers
 
 .. toctree::

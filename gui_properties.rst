@@ -25,8 +25,8 @@ running Zenoss. The CLI default prompt is **[zenoss:~]:**
 # Event Traps (TBD)
 
 
-Trick: Change Column Appearances
----------------------------------
+Renderer: Changing Column Appearances
+-------------------------------------
 
 Change the "First Seen" and "Last Seen" columns in the event console to show
 how long ago the event occurred in a more human-friendly way. This is done 
@@ -41,7 +41,7 @@ through the following JS function exampe (time_ago_columns.js)::
                var interval = Math.floor(seconds / 31536000);
 
                if (interval > 1)
-                   return interval + " years ago";
+                  return interval + " years ago";
 
                interval = Math.floor(seconds / 2592000);
                if (interval > 1)
@@ -67,3 +67,159 @@ through the following JS function exampe (time_ago_columns.js)::
        Zenoss.events.registerCustomColumn('lastTime', time_ago_column);
 
    }());
+
+Renderer: Linking Grid Elements to other Component Views 
+--------------------------------------------------------
+
+Again we are looking at the JS files in $ZPDIR/browser/resources/js/ .
+Inside your anonymous function, we need to define a custom renderer 
+(extending Zenoss.render) that creates URL links::
+
+  Ext.apply(Zenoss.render, {                                                      
+      ZenPacks_zenoss_DatabaseMonitor_entityLinkFromGrid: function(obj, col, record) {            
+          if (!obj)                                                               
+              return;                                                             
+                                                                                  
+          if (typeof(obj) == 'string')                                            
+              obj = record.data;                                                  
+                                                                                  
+          if (!obj.title && obj.name)                                             
+              obj.title = obj.name;                                               
+                                                                                  
+          var isLink = false;                                                     
+                                                                                  
+          if (this.refName == 'componentgrid') {                                  
+              // Zenoss >= 4.2 / ExtJS4                                           
+              if (this.subComponentGridPanel || this.componentType != obj.meta_type)
+                  isLink = true;                                                  
+          } else {                                                                
+              // Zenoss < 4.2 / ExtJS3                                            
+              if (!this.panel || this.panel.subComponentGridPanel)                
+                  isLink = true;                                                  
+          }                                                                       
+                                                                                  
+          if (isLink) {                                                           
+              return '<a href="javascript:Ext.getCmp(\'component_card\').componentgrid.jumpToEnti>
+          } else {                                                                
+              return obj.title;                                                   
+          }                                                                       
+      },                                                                          
+  });
+
+
+Once that is defined, its really a piece of cake to get your item to link from
+your grid objects::
+
+   ZC.OracleTableSpacePanel = Ext.extend(ZC.DatabaseMonitorComponentGridPanel, {   
+       constructor: function(config) {                                             
+           config = Ext.applyIf(config||{}, {                                      
+               autoExpandColumn: 'name',                                           
+               componentType: 'OracleTableSpace',                                  
+               fields: [                                                           
+                   {name: 'uid'},                
+                   ......
+                   ......
+               ],
+               columns: [
+               {                                                                   
+                   id: 'severity',                                                 
+                   dataIndex: 'severity',                                          
+                   header: _t('Events'),                                           
+                   renderer: Zenoss.render.severity,                               
+                   sortable: true,                                                 
+                   width: 40                                                       
+               },{                                                                 
+                   id: 'instance',                                                 
+                   dataIndex: 'instance',                                          
+                   header: _t('Instance'),                                         
+                   **renderer: Zenoss.render.ZenPacks_zenoss_DatabaseMonitor_entityLinkFromGrid,**
+                   sortable: true,                                                 
+                   width: 70                                                       
+               },
+               ... etc ...
+
+
+Now this ZC.OracleTableSpacePanel grid will have a link to the ZC.OracleInstancePanel grid.
+
+Tip: Changing Detail Values in the Navigator
+---------------------------------------------
+
+The Navigator (Nav Panel) is really the detail panel below the component frame.
+It does not not really navigate. We will show how to change the values
+presented in the Details window of the Nav.
+
+In your component source you have two classes: TablespaceInfo and
+ITablespaceInfo (replace "TableSpace" with your actual component name). In
+order to change the units on our tablespace_allocbytes and tablespace_maxbytes,
+which are in bytes, we create decorated class methods::
+
+  class ITableSpaceInfo(IComponentInfo):
+      tablespace_name = schema.TextLine(title=_t(u'TableSpace'), readonly=True)
+      allocSize = schema.Float(title=_t(u'Allocated Size'), readonly=True)
+      maxSize = schema.Float(title=_t(u'Max Size'), readonly=True)
+      ...
+
+   class TableSpaceInfo(ComponentInfo):
+       implements(ITableSpaceInfo)
+
+       tablespace_name = ProxyProperty('tablespace_name')
+       tablespace_allocbytes = ProxyProperty('tablespace_allocbytes')
+       tablespace_maxbytes = ProxyProperty('tablespace_maxbytes')
+       ....
+
+       @property
+       def allocSize(self):
+           return convToUnits(self._object.tablespace_allocbytes)
+
+       @property
+       def maxSize(self):
+           return convToUnits(self._object.tablespace_maxbytes)
+
+The Nav will auto-magically pick up the values in the ITableSpaceInfo
+and present that in the Details page.
+
+
+GUI: Auto-Expanding Columns and minWidth for Component Grids
+------------------------------------------------------------
+
+Component grids traditionally use the *Name* field to take up all
+the extra slack in the spacing. To do that you first set it up as
+an **autoExpandColumn** . I also like to set it with a minimum with
+using the **minWidth** parameter so it remains visible.
+
+So in your $ZPDIR/browser/resources/js/MyComponent.js you should have something
+like this::
+
+  ZC.OracleInstancePanel = Ext.extend(ZC.DatabaseMonitorComponentGridPanel, {     
+    constructor: function(config) {                                             
+        config = Ext.applyIf(config||{}, {                                      
+            componentType: 'OracleInstance',                                    
+            autoExpandColumn: 'name',                                           
+            sortInfo: {                                                         
+                field: 'name',                                                  
+                direction: 'asc',                                               
+            },                                                                  
+            fields: [                                                           
+                {name: 'uid'},                                                  
+                {name: 'name'},                                                 
+                {name: 'meta_type'},                                            
+                {name: 'status'},                                               
+                {name: 'severity'},                                             
+                ..................
+            ],                                                                  
+            columns: [{                                                         
+                id: 'severity',                                                 
+                dataIndex: 'severity',                                          
+                header: _t('Events'),                                           
+                renderer: Zenoss.render.severity,                               
+                sortale: true,                                                            
+                width: 50                                                        
+            },{               
+                id: 'name',                                                     
+                dataIndex: 'name',                                              
+                header: _t('Name'),                                             
+                sortable: true,
+                minWidth: 70
+            },........
+
+
