@@ -8,6 +8,15 @@ Welcome to the ZenPack Hitch-Hikers Guide!
 
    introduction
 
+Topics for Zenpack Administration
+=============================================
+
+.. toctree::
+   :maxdepth: 2
+
+   cli_monitoring
+   databases
+
 Topics for Zenpack Development
 =============================================
 
@@ -16,22 +25,21 @@ This is the documentation for Inter-Galactic ZenPack Developers
 .. toctree::
    :maxdepth: 2
 
-   git
    migration
    impact
    load-templates
-   cli_monitoring
    unit_testing
    gui_properties
    modeling
    zep
 
 Other Topics:
---------------
+==============
 
 
 .. toctree::
    :maxdepth: 2
 
    ansible
+   git
 

@@ -141,12 +141,41 @@ your grid objects::
 
 Now this ZC.OracleTableSpacePanel grid will have a link to the ZC.OracleInstancePanel grid.
 
-Tip: Changing Detail Values in the Navigator
+GUI: Adding an Extra Panel to the Navigator 
 ---------------------------------------------
 
-The Navigator (Nav Panel) is really the detail panel below the component frame.
-It does not not really navigate. We will show how to change the values
-presented in the Details window of the Nav.
+So you have your new component, say TableSpaces and your associated
+OracleTableSpacePanel grid as above. But you may want to have a Nav info
+view that associates the containing component (Instance in our case).
+Do do so we again modify the $ZPDIR/browser/resources/js/DatabaseMonitor.js
+source as follows; Inside the main anonymous function, add the following
+(See also the JS for PostgreSQL.js)::
+
+   Zenoss.nav.appendTo('Component', [{                                          
+       id: 'component_tablespaces',                                             
+       text: _t('TableSpaces'),                                                 
+       xtype: 'OracleTableSpacePanel',                                          
+       subComponentGridPanel: true,                                             
+       filterNav: function(navpanel) {                                          
+           switch (navpanel.refOwner.componentType) {                           
+               case 'OracleInstance': return true;                              
+               default: return false;                                           
+           }                                                                    
+       },                                                                       
+       setContext: function(uid) {                                              
+           ZC.OracleTableSpacePanel.superclass.setContext.apply(this, [uid]);   
+       }                                                                        
+   }]);                                                                         
+      
+Notice that the *switch* that returns True for the super-component
+OracleInstance.
+
+
+GUI: Changing Detail Values in the Navigator
+---------------------------------------------
+
+The Navigator (Nav Panel) contains the Detail View (and others) below the component frame.
+We will show how to change the values presented in the Details window of the Nav.
 
 In your component source you have two classes: TablespaceInfo and
 ITablespaceInfo (replace "TableSpace" with your actual component name). In
@@ -187,7 +216,7 @@ the extra slack in the spacing. To do that you first set it up as
 an **autoExpandColumn** . I also like to set it with a minimum with
 using the **minWidth** parameter so it remains visible.
 
-So in your $ZPDIR/browser/resources/js/MyComponent.js you should have something
+So in your $ZPDIR/browser/resources/js/DatabaseMonitor.js you should have something
 like this::
 
   ZC.OracleInstancePanel = Ext.extend(ZC.DatabaseMonitorComponentGridPanel, {     

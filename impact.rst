@@ -31,6 +31,30 @@ The Basic idea behind Impact is as follows:
 
    - It may be useful to create a diagram that shows dependency
    - Make sure you understand how a component or device failure will affect other systems.
+   - In your base classes you have defined your _relations which can be
+     (ToOne, ToMany, ToManyCont, etc). Example minus Boilerplate:
+
+  In Instance.py::
+   
+   _relations = _relations + (
+       ('Instance_host', ToOne(
+                               ToManyCont, 
+                               'Products.ZenModel.Device.Device', 
+                               'oracle_instances')),
+       ('oracle_tablespaces', ToManyCont(
+                                 ToOne, 
+                                 'ZenPacks.zenoss.DatabaseMonitor.TableSpace.TableSpace', 
+                                 'instance')),
+       )
+
+  In TableSpace.py::
+
+    _relations = _relations + (
+        ('instance', ToOne(ToManyCont,
+                           'Products.ZenModel.Instance.Instance',
+                           'oracle_tablespaces'),
+        ),
+    )
 
 * Define the depenency classes for your ZP
 
@@ -41,17 +65,18 @@ The Basic idea behind Impact is as follows:
    - For example: **class InstanceRelationsProvider(BaseRelationsProvider)**
    - Here is an example (minus boilerplate)::
 
-      # Give Impact what (bi-directional) dependencies for Devices
+      # Give Impact (one-direction => ) dependencies for Devices
       class DeviceRelationsProvider(BaseRelationsProvider):
-          impact_relationships = (
-              'oracle_instances',
-              )
+          impact_relationships = ( 'oracle_instances',)
 
-      # Give Impact the (bi-directional) dependencies for Instances
+      # Give Impact the (bi-directional<=> ) dependencies for Instances
       class InstanceRelationsProvider(BaseRelationsProvider):
-          impacted_by_relations = (
-              'Instance_host',
-              )
+          impacted_by_relations = ( 'Instance_host',)
+          impact_relationships = ( 'oracle_tablespaces',)
+
+      # Tell Impact the (one-directional <= ) dependencies of TableSpaces
+      class TableSpaceRelationsProvider(BaseRelationsProvider):                       
+          impacted_by_relationships = ( 'instance',) 
 
 
 * Now that the dependencies are made, you can **register** this code with Impact:
@@ -61,8 +86,16 @@ The Basic idea behind Impact is as follows:
    - Here is an example for DatabaseMonitor::
 
       <?xml version="1.0" encoding="utf-8"?>
-      <configure xmlns="http://namespaces.zope.org/zope">
+      <configure 
+          xmlns="http://namespaces.zope.org/zope"
+          xmlns:browser="http://namespaces.zope.org/browser"
+          xmlns:zcml="http://namespaces.zope.org/zcml"
+          >
 
+          <!-- API: Info Adapters -->
+          ... boilderplate ...
+
+          <!-- Impact -->
           <include package="ZenPacks.zenoss.Impact" file="meta.zcml"/>
 
           <subscriber
@@ -77,13 +110,13 @@ The Basic idea behind Impact is as follows:
               factory=".impact.InstanceRelationsProvider"
               />
 
+          <subscriber
+              provides="ZenPacks.zenoss.Impact.impactd.interfaces.IRelationshipDataProvider"
+              for=".TableSpace.TableSpace"
+              factory=".impact.TableSpaceRelationsProvider"
+              />
+
       </configure>
-
-
-4. Give Users Instructions on Removing Old Object Templates
-
-   - Since you may have left the old ZP objects in tact,
-     provide documentation on how to un-bind the old templates.
 
 
 
@@ -95,7 +128,7 @@ Boiler Plate Code Example
 ::
 
    ##############################################################################
-   # Boiler Plate Code is Yummy!
+   # Boiler Plate Code for Impact! file: impact.py
    ##############################################################################
 
    from ZenPacks.zenoss.XenServer import ZENPACK_NAME
@@ -216,6 +249,24 @@ Boiler Plate Code Example
            for trigger_args in self.triggers:
                yield Trigger(self.guid(), *trigger_args)
 
+
+    # ------------------------------------------------------------------------#
+    """ The critical part of Impact: We define the impact relations """
+    # ------------------------------------------------------------------------#
+
+    # This tells Impact what (bi-directional) dependencies of Devices for this ZP
+    class DeviceRelationsProvider(BaseRelationsProvider):
+        impact_relationships = ( 'oracle_instances',)
+    
+    # Tell Impact of the (bi-directional) dependencies Instances for this ZP
+    class InstanceRelationsProvider(BaseRelationsProvider):
+        impacted_by_relationships = ( 'Instance_host',)
+        impact_relationships = ( 'oracle_tablespaces',)
+    
+    # Tell Impact of the (bi-directional) dependencies of TableSpaces for this ZP
+    class TableSpaceRelationsProvider(BaseRelationsProvider):
+        impacted_by_relationships = ( 'instance',)
+    
 Show Impacts for Thing
 ------------------------
 
@@ -223,7 +274,7 @@ This is some sample code that shows impacts on an object::
 
    from zope.component import subscribers
    from Products.ZenUtils.guid.interfaces import IGUIDManager
-   from ZenPacks.zenoss.Impact.impactd.interfaces import IRelationshipDataProvider
+   from ZenPacks.zeross.Impact.impactd.interfaces import IRelationshipDataProvider
 
 
    def show_impacts_for(thing):
@@ -237,7 +288,6 @@ This is some sample code that shows impacts on an object::
                print "    %s (%s) -> %s (%s)" % (
                    source.id, source.meta_type, impacted.id, impacted.meta_type)
            print
-
 
    show_impacts_for(find("VACC").os.interfaces._getOb('VLAN0200'))
 

@@ -2,6 +2,8 @@
 Ansible Rough Guide
 ==============================================================================
 .. image:: _static/zebraffe.png
+   :scale: 50 %
+
 
 Description
 ------------------------------------------------------------------------------
@@ -48,7 +50,7 @@ Group Vars and Host Vars
 Group and Host vars are simple YAML files. 
 From your ansible root, they are located in::
 
-  $ANSIBLE/groups_vars
+  $ANSIBLE/group_vars
   $ANSIBLE/host_vars
 
 An example of group and host vars:
@@ -123,20 +125,20 @@ the Ansible root and has a series of folders that correspond to
 task groups::
 
   ansible
-  │   
-  ├── group_vars
-  │   └── all
-  ├── host_vars
-  │   ├── 192.168.122.7
-  │   └── mp2.zenoss.loc
-  ├── laptops.yml
-  ├── production
-  ├── roles
-  │   ├── common
-  │   ├── network
-  │   ├── security
-  │   └── zenoss
-  └── zenoss.yml
+  |   
+  |-- group_vars
+  |   \-- all
+  |-- host_vars
+  |   |-- 192.168.122.7
+  |   \-- mp2.zenoss.loc
+  |-- laptops.yml
+  |-- production
+  |-- roles
+  |   |-- common
+  |   |-- network
+  |   |-- security
+  |   \-- zenoss
+  \-- zenoss.yml
 
 
 Inside of each role are the following directories which ansible will
@@ -147,11 +149,11 @@ automatically search for needed files:
 ::
 
   ansible/roles/security/
-  ├── files
-  ├── handlers
-  ├── tasks
-  ├── templates
-  └── vars
+  |-- files
+  |-- handlers
+  |-- tasks
+  |-- templates
+  \-- vars
 
 Here is the lowdown on what goes in these folders:
 
@@ -169,22 +171,22 @@ So full blown security folder looks like this:
 ::
 
   roles/network/
-  ├── files
-  ├── handlers
-  │   └── main.yml
-  ├── tasks
-  │   ├── centos.yml
-  │   ├── debian.yml
-  │   ├── main.yml
-  │   └── ubuntu.yml
-  ├── templates
-  │   ├── ifcfg-eth0
-  │   ├── ifcfg-eth2
-  │   ├── ifcfg-static
-  │   ├── network
-  │   └── sysconfig
-  │       └── network-scripts
-  └── vars
+  |-- files
+  |-- handlers
+  |   |-- main.yml
+  |-- tasks
+  |   |-- centos.yml
+  |   |-- debian.yml
+  |   |-- main.yml
+  |   |-- ubuntu.yml
+  |-- templates
+  |   |-- ifcfg-eth0
+  |   |-- ifcfg-eth2
+  |   |-- ifcfg-static
+  |   |-- network
+  |   \-- sysconfig
+  |       \-- network-scripts
+  \- vars
 
 Thats enough theory. Lets do some demonstrations!
 
