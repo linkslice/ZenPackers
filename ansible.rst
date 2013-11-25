@@ -55,7 +55,7 @@ From your ansible root, they are located in::
 
 An example of group and host vars:
 
- [carinhas@zen:~/ansible]: cat group_vars/all 
+ [joe@zen:~/ansible]: cat group_vars/all 
 
 ::
 
@@ -67,14 +67,14 @@ An example of group and host vars:
    https_port: 443
    ntpserver: us.pool.ntp.org
    git_repo: http://github.com/xxx/mywebapp.git
-   sudo_user: carinhas
+   sudo_user: joe
    opt_bin: /opt/bin
    opt_log: /opt/log
    maven_url: http://www.eng.lsu.edu/3.0/binaries/apache-maven-3.0.5-bin.tar.gz
 
 and some host vars....
 
- [carinhas@zen:~/ansible]: cat host_vars/mp1.zenoss.loc
+ [joe@zen:~/ansible]: cat host_vars/mp1.zenoss.loc
 
 ::
 
@@ -144,7 +144,7 @@ task groups::
 Inside of each role are the following directories which ansible will
 automatically search for needed files:
 
- [carinhas@zenpad:~/ansible]: tree -L 1 roles/security
+ [joe@zenpad:~/ansible]: tree -L 1 roles/security
 
 ::
 
@@ -166,7 +166,7 @@ Here is the lowdown on what goes in these folders:
 
 So full blown security folder looks like this:
 
- [carinhas@zenpad:~/ansible]: tree -L 5 roles/network
+ [joe@zenpad:~/ansible]: tree -L 5 roles/network
 
 ::
 
