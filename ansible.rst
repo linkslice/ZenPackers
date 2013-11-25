@@ -194,3 +194,4 @@ Links:
 
 * Ansible Modules: http://www.ansibleworks.com/docs/modules.html
 * Best Practices:  http://www.ansibleworks.com/docs/playbooks_best_practices.html
+* Download the associated video :download:`ansible.avi <ansible.avi>`

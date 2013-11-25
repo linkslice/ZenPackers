@@ -49,6 +49,7 @@ clean:
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
+	cp -a build/html /tmp/
 	@echo "Build finished. The HTML pages are in  $(BUILDDIR)/html."
 
 wiki: $(WIKIS)

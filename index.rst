@@ -42,4 +42,5 @@ Other Topics:
 
    ansible
    git
+   vim-ide
 
