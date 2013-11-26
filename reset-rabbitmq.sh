@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# Removes all Zenoss RabbitMQ information and re-initializes the known vhosts
-# with the appropriate permissions for the Zenoss user.
-# Run as root
+# 1. Stops Zenoss
+# 2. Removes all Zenoss RabbitMQ information and re-initializes the known vhosts
+#    with the appropriate permissions for the Zenoss user.
+# 3. Starts Zenoss
+# Run as zenoss: The zenoss user must have full sudo access.
+# If you run as root, you (may) need to source ~zenoss/.profile
 
 set +e
 
-/usr/sbin/service zenoss stop
+sudo service zenoss stop
 
 ZENOSS_VHOST=`zenglobalconf -p amqpvhost 2>/dev/null`
 ZENOSS_USER=`zenglobalconf -p amqpuser 2>/dev/null`
@@ -38,3 +41,6 @@ for vhost in $VHOSTS; do
     $RABBITMQCTL add_vhost "$vhost"
     $RABBITMQCTL set_permissions -p "$vhost" "$USER" '.*' '.*' '.*'
 done
+
+sudo service zenoss start                                                   
+

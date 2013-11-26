@@ -1,5 +1,5 @@
 ==================================
-Dealing with Databases and Rabbits
+Databases and Rabbits
 ==================================
 
 This chapter covers various Zenoss database problems and how to cure them.
@@ -52,7 +52,13 @@ your Event.log::
   Module amqplib.client_0_8.method_framing, line 221, in read_method
   error: [Errno 104] Connection reset by peer
 
-You may be able to fix this by applying the following script (PC and JC):
+This indicates that RabbitMQ's internal setup has been corrupted. RabbitMQ does
+not have a simple configuration file you can tweek. It must be fixed by setting
+environment variables and then re-started. Its been rumored that even changing
+the hostname can make the Rabbit barf... This is becuase RabbitMQ names the
+database folders with the hostname.
+
+You may be able to fix this by applying the following (Thanks PC and JC):
 
 * Stop Zenoss
 * Execute the following::
