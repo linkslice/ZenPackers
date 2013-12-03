@@ -368,6 +368,12 @@ Installing DB2 Express on Linux
 * Save the Response File
 * Next time use the Response File to install all
 
+Links for Installation:
+
+* http://www.ibiblio.org/pub/linux/docs/HOWTO/DB2-HOWTO
+* http://www.tldp.org/HOWTO/DB2-HOWTO/prerequisites.html
+* http://www.sqlpanda.com/2013/08/install-db2-105-on-centos-64.html
+
 Removing DB2 on Linux
 ------------------------
 
