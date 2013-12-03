@@ -43,4 +43,5 @@ Other Topics:
    ansible
    git
    vim-ide
+   db2
 
