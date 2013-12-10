@@ -16,6 +16,9 @@ Topics for Zenpack Administration
 
    cli_monitoring
    databases
+   attribute_errors
+   zenwipe
+   3rd_party_licensing
 
 Topics for Zenpack Development
 =============================================

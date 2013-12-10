@@ -10,15 +10,19 @@ You want to do the following:
 #. Copy your old .vimrc (and .vim if you have on) to a backup
 #. Make some folders and init git::
 
-   [zenoss@~]:  mkdir ~/.vim/
-   [zenoss@~]:  mkdir ~/.vim/{autoload,bundle}
+   [zenoss@~]:  mkdir -p ~/.vim/{autoload,bundle}
    [zenoss@~]:  cd ~/.vim/
    [zenoss@.vim]:  git init
 
+#. Install Pathogen::
+
+   curl -Sso ~/.vim/autoload/pathogen.vim \
+       https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
 #. Paste the following into your .vimrc::
-   filetype off
-   call pathogen#runtime_append_all_bundles()
-   call pathogen#helptags()
+   execute pathogen#infect() 
+   syntax on
+   filetype plugin indent on
 
 #. Now execute the following inside the .vim folder
    

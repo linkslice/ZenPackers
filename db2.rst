@@ -30,14 +30,13 @@ According to the JDBC specification, there are four types of JDBC driver archite
    data source to which they connect. Because of the native code, their
    portability is limited.
 
-* Type 3 (Not available)
+* Type 3 (Standard Choice without the fancy Type 4 options. Use if possible)
 
    Drivers that use a pure Java client and communicate with a data server
    using a data-server-independent protocol. The data server then communicates
-   the client's requests to the data source. The DB2 database system does not
-   provide a type 3 driver.
+   the client's requests to the data source. 
 
-* Type 4 (Only Reasonable Choice)
+* Type 4 (Fancy Options: Not needed)
 
    Drivers that are pure Java and implement the network protocol for a specific
    data source. The client connects directly to the data source.
@@ -367,6 +366,10 @@ Installing DB2 Express on Linux
 * Make sure the installer finishes without error
 * Save the Response File
 * Next time use the Response File to install all
+* Once installed, issue "db2sampl" to create a sample db.
+  - db2 connect to sample
+  - db2 'select * from dept'
+
 
 Links for Installation:
 
