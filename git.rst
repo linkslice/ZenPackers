@@ -1,5 +1,5 @@
 ========================================================================
-Git for Young Gits ;}
+Git for Gits ;)
 ========================================================================
 
 Git is a developement version control tool. 
@@ -123,6 +123,25 @@ To remove a local branch::
 To remove a  remote branch::
   
   git push origin --delete <branchName>
+
+
+Stashing Modified Files
+------------------------
+
+Git's *stash* option allows you to put modified files into a temporary holding
+area. The usual scenario is to stash your mods away then pull from the origin,
+and then re-place your stash'ed files into the tree. Then you can push the 
+results back up to origin. Here is the flow::
+
+  git stash
+  git pull
+  git stash pop
+  .... now you have your new mods overlaid ....
+  .... make whatever other modifications ....
+  .... now you can commit all your mods ....
+  git commit -a
+  git push
+
 
 =============================================================================
 Git Flow 

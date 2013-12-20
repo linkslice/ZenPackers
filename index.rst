@@ -18,6 +18,7 @@ Topics for Zenpack Administration
    databases
    attribute_errors
    zenwipe
+   rrdtool
    3rd_party_licensing
 
 Topics for Zenpack Development
