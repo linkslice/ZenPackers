@@ -24,6 +24,88 @@ running Zenoss. The CLI default prompt is **[zenoss:~]:**
 # RRD (TBD)
 # Event Traps (TBD)
 
+Variables: Who, What, Where, and How
+-------------------------------------
+
+Variables in the GUI are primarily set by our ExtJS Javascript library
+configuration. These are the steps:
+
+* The variables must first be defined in ZP defined classes that inherit 
+  IComponentInfo and ComponentInfo
+* Then these variables must be set in either the modeler or the datasource collectors. 
+* Finally they can be used in the ExtJS javascript
+
+
+We use the DatabaseMonitor ZP (Oracle) as an example. We first define the
+Instance class (heavily abbreviated)::
+
+  class Instance(DeviceComponent, ManagedEntity):                                 
+      meta_type = portal_type = 'OracleInstance'                                  
+      .......
+
+      hostname = None
+      instance_name = None
+      .......
+      
+      _properties = _properties + (                                               
+        {'id': 'hostname', 'type': 'string', 'mode': 'w'},                      
+        {'id': 'instance_name', 'type': 'string', 'mode': 'w'},
+        ...
+      )
+      .......
+
+   class IInstanceInfo(IComponentInfo):                                            
+                                                                                   
+       hostname = schema.TextLine(title=_t(u'Hostname'), readonly=True)                                      
+       instance_name = schema.TextLine(title=_t(u'Instance Name'), readonly=True)
+      .......
+
+   class InstanceInfo(ComponentInfo):                                              
+       implements(IInstanceInfo)                                                   
+                                                                                   
+       hostname = ProxyProperty('hostname')                                        
+       instance_name = ProxyProperty('instance_name')
+      .......
+
+Now you can use your variables in an anonmous function inside your ExtJS::
+
+    ZC.OracleInstancePanel = Ext.extend(ZC.DatabaseMonitorComponentGridPanel, {  
+       constructor: function(config) {                                          
+           config = Ext.applyIf(config||{}, {                                   
+               componentType: 'OracleInstance',                                 
+               autoExpandColumn: 'name',                                        
+               sortInfo: {                                                      
+                   field: 'name',                                               
+                   direction: 'asc',                                            
+               },                                                               
+               fields: [                                                        
+                   {name: 'uid'},                                               
+                   {name: 'name'},                                              
+                   {name: 'hostname'},                                                                    
+                   {name: 'instance_name'},                                     
+                   ...
+               ],                                                               
+               columns: [{                                                      
+                   id: 'severity',                                              
+                   dataIndex: 'severity',                                       
+                   ............                                                 
+               },{                                                              
+                   id: 'name',                                                  
+                   dataIndex: 'name',                                           
+                   ...........
+               },{                                                              
+                   id: 'hostname',                                              
+                   dataIndex: 'hostname',                                       
+                   header: _t('Hostname'),                                      
+                   width: 160                                                   
+               },{                                                              
+                   dataIndex: 'instance_name',                                   
+                   header: _t('DB Name'),                                       
+                   id: 'instance_name',                                          
+                   width: 75                                                    
+               }, .... etc ....
+
+
 
 Renderer: Changing Column Appearances
 -------------------------------------
