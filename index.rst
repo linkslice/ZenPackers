@@ -29,17 +29,27 @@ This is the documentation for Inter-Galactic ZenPack Developers
 .. toctree::
    :maxdepth: 2
 
-   migration
+   events
+   gui_properties
    impact
    load-templates
-   unit_testing
-   gui_properties
+   migration
    modeling
+   unit_testing
    zep
+
+Pythonic Topics:
+================
+
+Some advanced Python docs not specific to Zenoss
+   
+.. toctree::
+   :maxdepth: 2
+
+   regex_by_key
 
 Other Topics:
 ==============
-
 
 .. toctree::
    :maxdepth: 2

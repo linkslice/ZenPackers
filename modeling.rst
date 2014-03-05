@@ -5,7 +5,6 @@ Modeling for Zenpacks: Selected Topics
 Modeling is an integral part of Zenoss. This article explores specific
 tasks related to modeling.
 
-
 Prerequisites
 ------------------------------------------------------------------------------
 
@@ -22,10 +21,22 @@ As you should know, modelers typically live in the folder::
 
   $ZP_DIR/modeler/plugins/zenoss/MyModeler.py
 
+Debugging Tips in General
+---------------------------------------------------
+* Run the modeler manually like this::
+
+   zenmodeler run  -workers=0 -v10 -d mp3.zenoss.loc |& tee mod.txt
+
+* If you don't get anything modeled at all you can try this:
+
+  - Restart zenhub: it may have given up loading the modeler
+  - Rerun the zenmodeler command above and also monitor the zenhub log
+    in /opt/zenoss/log/zenhub.log for good measure.
+
 General Introduction
 ------------------------------------------------------------------------
 
-Modeler classes generally have two methods that are used by the $zenmodeler$
+Modeler classes generally have two methods that are used by the **zenmodeler**
 service. They are:
 
 * collect(): This method collects the data in an asychronous way.
@@ -39,7 +50,16 @@ service. They are:
 
 * process(self, device, results, log):
   This method (asynchronously) takes that results dict uses it to populate
-  the device model.
+  the device model. It has a signature resembling::
+
+   def process(self, device, results, log):
+        '''results comes back from collect via twisted.'''
+       for label, data in results.items():
+           ... set your class instance values ....
+           .........
+
+       ..... create relationmaps between object instances .....
+       return relationmaps
 
 We talk more in the sections below about this.
 
@@ -173,8 +193,59 @@ Notice that in this example we must:
 This is a simple example. To see this how this was implemented see the
 ZenPacks.zenoss.DatabaseMonitor's modeler plugin.
 
-To see other examples: 
+To see other examples:
 
 * ZenPacks.zenoss.PostgreSQL (simpler)
 * ZenPacks.zenoss.XenServer  (more complex)
+
+Error: No Classifier Found, KeyError
+----------------------------------------
+
+If you get an error this this nature::
+
+   2014-02-06 13:59:01,678 DEBUG zen.Classifier: No classifier defined
+   2014-02-06 13:59:01,814 ERROR zen.ZenModeler: : Traceback (most recent call last):
+     File "/opt/zenoss/Products/ZenHub/PBDaemon.py", line 85, in inner
+       return callable(*args, **kw)
+     File "/opt/zenoss/Products/ZenHub/services/ModelerService.py", line 132, in remote_applyDataMaps
+       result = inner(map)
+     File "/opt/zenoss/Products/ZenHub/services/ModelerService.py", line 128, in inner
+       return self._do_with_retries(action)
+     File "/opt/zenoss/Products/ZenHub/services/ModelerService.py", line 154, in _do_with_retries
+       return action()
+     File "/opt/zenoss/Products/ZenHub/services/ModelerService.py", line 127, in action
+       return bool(adm._applyDataMap(device, map))
+     File "/opt/zenoss/lib/python/ZODB/transact.py", line 44, in g
+       r = f(*args, **kwargs)
+     File "/opt/zenoss/Products/DataCollector/ApplyDataMap.py", line 202, in _applyDataMap
+       tobj = device.getObjByPath(datamap.compname)
+     File "/opt/zenoss/Products/ZenModel/ZenModelBase.py", line 624, in getObjByPath
+       return getObjByPath(self, path)
+     File "/opt/zenoss/Products/ZenUtils/Utils.py", line 299, in getObjByPath
+       next=obj[name]
+     File "/opt/zenoss/lib/python/OFS/ObjectManager.py", line 777, in __getitem__
+       raise KeyError, key
+   KeyError: 'db2_databases'
+   : <no traceback>
+   Traceback (most recent call last):
+     File "/opt/zenoss/Products/DataCollector/zenmodeler.py", line 693, in processClient
+       if driver.next():
+     File "/opt/zenoss/Products/ZenUtils/Driver.py", line 63, in result
+       raise ex
+
+you probably have a problem where ZODB does not have a relationship map built
+to handle your data structure. This can happen if:
+
+* Your ZenPack failed to execute buildRelations() on your device.
+* You somehow damaged the relations structure in ZODB.
+* The device structure was changed after the ZP was installed, while the old
+  relationship map still persists.
+
+You may be able to fix this in **zendmd** by issuing these commands::
+
+   [zenoss:~]: zendmd
+   >>> d=find('mp3.zenoss.loc')
+   >>> d.buildRelations()
+   >>> commit()
+
 

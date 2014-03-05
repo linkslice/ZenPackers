@@ -192,6 +192,8 @@ Thats enough theory. Lets do some demonstrations!
 
 Links:
 
+* Ansible Intro: http://docs.ansible.com/intro.html
 * Ansible Modules: http://www.ansibleworks.com/docs/modules.html
 * Best Practices:  http://www.ansibleworks.com/docs/playbooks_best_practices.html
+* http://jpmens.net/2012/08/30/ansible-variables-variables-and-more-variables/
 * Download the associated video :download:`ansible.avi <ansible.avi>`

@@ -143,6 +143,14 @@ results back up to origin. Here is the flow::
   git push
 
 
+
+Comparison of Git Branches
+---------------------------------------------------
+
+* Show only relevant commits between two git refs::
+
+  git log --no-merges master..develop
+
 =============================================================================
 Git Flow 
 =============================================================================

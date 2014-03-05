@@ -214,7 +214,7 @@ your grid objects::
                    id: 'instance',                                                 
                    dataIndex: 'instance',                                          
                    header: _t('Instance'),                                         
-                   **renderer: Zenoss.render.ZenPacks_zenoss_DatabaseMonitor_entityLinkFromGrid,**
+      >>           renderer: Zenoss.render.ZenPacks_zenoss_DatabaseMonitor_entityLinkFromGrid,
                    sortable: true,                                                 
                    width: 70                                                       
                },
