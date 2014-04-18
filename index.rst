@@ -20,6 +20,7 @@ Topics for Zenpack Administration
    zenwipe
    rrdtool
    3rd_party_licensing
+   zenpack_release
 
 Topics for Zenpack Development
 =============================================

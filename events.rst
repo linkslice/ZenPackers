@@ -44,4 +44,34 @@ Here is an example ::
 
        return result
 
+Clearing Events
+---------------
+
+In order for an event to *auto-clear* or automatically clear, the event
+fingerprint must match for both events (the event that set the error and the
+one that clears it). The fingerprint is composed of the following items:
+
+* device
+* component (can be blank)
+* eventKey (can be blank)
+* eventClass (including zEventClearClasses from event class configuration properties)
+
+Reference: https://community.zenoss.org/docs/DOC-9437
+
+
+
+INFO zen.ZenModeler Mesages
+---------------------------
+
+If you have messages that you get from the zen.ZenModeler that you want to
+zoom in on, try these settings:
+
+* set CollectorLogChanges to True
+* remodel the device
+* Look for closed info severity events in teh /Change event class
+* You can also look in zenhub for events
+
+
+  
+
 
