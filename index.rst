@@ -39,6 +39,16 @@ This is the documentation for Inter-Galactic ZenPack Developers
    unit_testing
    zep
 
+Topics for ZenpackLib 
+=============================================
+
+Documentation for ZenPackLib 
+
+.. toctree::
+   :maxdepth: 2
+
+   zpl_intro
+
 Pythonic Topics:
 ================
 

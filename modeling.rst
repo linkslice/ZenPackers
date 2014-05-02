@@ -198,8 +198,11 @@ To see other examples:
 * ZenPacks.zenoss.PostgreSQL (simpler)
 * ZenPacks.zenoss.XenServer  (more complex)
 
+Miscellaneous Debugging
+---------------------------
+
 Error: No Classifier Found, KeyError
-----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you get an error this this nature::
 
@@ -247,5 +250,11 @@ You may be able to fix this in **zendmd** by issuing these commands::
    >>> d=find('mp3.zenoss.loc')
    >>> d.buildRelations()
    >>> commit()
+
+DEBUG zen.Classifier: No classifier defined
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a remnant of another ZP that never got implemented.
+Please ignore this one.
 
 
