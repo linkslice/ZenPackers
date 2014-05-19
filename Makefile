@@ -50,6 +50,7 @@ html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	cp -a build/html /tmp/
+	rsync -av build/html/ soluciones.zenoss.loc:/httpd/zenpackers/
 	@echo "Build finished. The HTML pages are in  $(BUILDDIR)/html."
 
 wiki: $(WIKIS)

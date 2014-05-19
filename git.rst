@@ -125,31 +125,12 @@ To remove a  remote branch::
   git push origin --delete <branchName>
 
 
-Stashing Modified Files
-------------------------
-
-Git's *stash* option allows you to put modified files into a temporary holding
-area. The usual scenario is to stash your mods away then pull from the origin,
-and then re-place your stash'ed files into the tree. Then you can push the 
-results back up to origin. Here is the flow::
-
-  git stash
-  git pull
-  git stash pop
-  .... now you have your new mods overlaid ....
-  .... make whatever other modifications ....
-  .... now you can commit all your mods ....
-  git commit -a
-  git push
-
-
-
 Comparison of Git Branches
 ---------------------------------------------------
 
 * Show only relevant commits between two git refs::
 
-  git log --no-merges master..develop
+   git log --no-merges master..develop
 
 =============================================================================
 Git Flow 
@@ -237,4 +218,53 @@ Git Flow does not automatically push your features.
 You can push it up to the hub like this::
 
   <bash>: git push -u origin feature/new
+
+Git Stash: Stashing Modified Files
+------------------------------------
+
+Git's *stash* option allows you to put modified files into a temporary holding
+area. The usual scenario is to stash your mods away then pull from the origin,
+and then re-place your stash'ed files into the tree. Then you can push the 
+results back up to origin. Here is a possible workflow::
+
+  .... you made changes to develop, but you'd rather it be in a feature....
+
+  <bash>: git stash
+   > Saved working directory and index state WIP on develop: e38b798 post
+   release: 1.0.1 -> 1.0.2dev.....
+
+  <bash>: git flow feature start cleanup_on_aisle_7
+   > Switched to a new branch 'feature/cleanup_on_aisle_7'
+
+  <bash>: git stash pop
+  .... now you have your new mods overlaid ....
+  .... make whatever other modifications ....
+  .... now you can commit all your mods ....
+
+  <bash>: git commit -a
+
+  <bash>: git flow feature finish cleanup_on_aisle_7
+
+  <bash>: git push
+
+Pull Requests: The Easy Way
+----------------------------
+
+The easiest way we have to get your code reviewed and merged into a major
+branch is to use Git Flow to create a feature, push that feature up to Github,
+and have someone review it. 
+
+Here is the workflow in a nutshell:
+
+* Create your feature with **git flow**
+* Make your mods
+* Commit your mods
+* Push your feature up to Gitflow
+* Go into the Github GUI, select your feature
+* Make your pull request
+* Ask for a review
+* That reveiwer then **merges** your changes into develop
+* Finsh your feature locally: Everything on Github is cleaned up for you.
+
+
 

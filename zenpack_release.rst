@@ -81,13 +81,19 @@ Starting from the *develop* branch
   - git commit -a -m "post release: $OLD -> ${CURRENT}dev"
 
 * git push
-* git push --tags
+* git push ---tags
 
   - This tags the revision with a crpyto-secure key for reference
 
+* Finally, push up the master changes:
+  
+  - git checkout master
+  - git push
+  - git checkout develop
 
-Build on Jenkins
--------------------
+
+Build the Master on Jenkins
+---------------------------
 
 Got to master branch on Jenkins and build it.
 This will look like
@@ -98,6 +104,13 @@ Parature
 --------------
 Note: Mere mortals are not typically allowed to do this step.
       Consult Chet, John, or Rusty.
+
+Method A: Required
+~~~~~~~~~~~~~~~~~~~
+* Email the ZP to Rusty: rwilson@zenoss.com
+
+Method B: Deprecated (Do this if you are suicidal).
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Go into Parature
 * Download the master Jenkins build from above: master-ZenPacks.zenoss.XYZ

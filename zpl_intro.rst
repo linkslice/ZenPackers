@@ -36,7 +36,7 @@ In your class definition (possibly __init__.py) you will have definitions of
 your Pool classes like:
 
 .. code-block:: python
-   :emphasize-lines: 3,5,31,41,42
+   :emphasize-lines: 5,9,35,45,46
    :linenos:                  
 
    RELATIONSHIPS_YUML = """
@@ -44,6 +44,10 @@ your Pool classes like:
    // Containing Relations
    // --------------------------------------------
    [ControlPlane]++pools -controlplane[Pool]
+   // --------------------------------------------
+   // Non-containing Relations
+   // --------------------------------------------
+   [Pool]*parentPool -.-childPools 0..1[Pool]
    """
 
    CFG = zenpacklib.ZenPackSpec(

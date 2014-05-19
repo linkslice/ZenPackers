@@ -33,9 +33,9 @@ This is the documentation for Inter-Galactic ZenPack Developers
    events
    gui_properties
    impact
-   load-templates
    migration
    modeling
+   templating
    unit_testing
    zep
 
