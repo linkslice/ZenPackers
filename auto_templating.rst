@@ -157,6 +157,8 @@ with the associated data and configures all the templates.
 If we look in the util.py import you'll find the 
 replaceLocalTemplate(obj, data, targetPythonClass) helper utility
 which configures that actual Template:
+( See reference: 
+https://github.com/zenoss/ZenPacks.zenoss.Microsoft.Windows/blob/develop/load-templates)
 
 .. code-block:: python
 
