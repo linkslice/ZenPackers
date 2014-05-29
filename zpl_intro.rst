@@ -118,7 +118,6 @@ $ZP_DIR/modeling:
 * $ZPDIR/modeler/plugins/zenoss/ControlPlane.py (wrapper for modeling.py)
 * $ZPDIR/modeling (Does the heavy lifting)
 
-
 In the modeler wrapper, ControlPlane.py we have:
 
 .. code-block:: python
@@ -270,3 +269,32 @@ data sources. That means the datapoints must match the keys exactly.
   - CoreLimit
   - MemoryLimit   
 
+ZPL Details Rendering 
+----------------------------------------------------
+| Thu May 29 16:01:30 CDT 2014
+You can now use the same rendering in the details that are used elsewhere.
+In your __init__.py you see this in the class properties:
+
+.. code-block:: python
+   :emphasize-lines: 11,14
+   :linenos:                  
+
+    classes={ .... 
+
+        'Flavor': {
+            'base': 'LogicalComponent',
+            'meta_type': 'OpenStackFlavor',
+            'label': 'Flavor',
+            'order': 1,
+            'properties': {
+                'flavorId':   { 'grid_display': False },             # 1
+                'flavorRAM':  { 'type_': 'int',
+                                'renderer': 'Zenoss.render.bytesString',
+                                'label': 'RAM' },                    # bytes
+                'flavorDisk': { 'type_': 'int',
+                                'renderer': 'Zenoss.render.bytesString',
+                                'label': 'Disk' }                    # bytes
+            }
+        },
+        ... etc ...
+    }

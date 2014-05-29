@@ -258,3 +258,30 @@ This is a remnant of another ZP that never got implemented.
 Please ignore this one.
 
 
+INFO zen.ZenModeler: No change in configuration detected (or similar)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So you've made changes to your ZP's class structure and have pushed those
+changes out. You may have even re-installed the ZP for good measure.
+Your modeler seems to be working correctly and gathering data.
+But your modeler isn't apply any changes.
+
+If your modeler get this message after modeling, you could be
+a victim of ZenDMD Class Mismatch Syndrome (TM). This means that the old
+structure is still in place and so none of your changes are being compared
+to the new class structure. There are 2 easy ways to fix this:
+
+#. Completely remove and reinstall your ZP, now remodel.
+#. Go into ZenDMD and simply load the new class, then remodel
+
+::
+
+
+   [zenoss@mp4:/home/zenoss]: zendmd
+   >>> from ZenPacks.zenoss.ExampleZP import ExampleZP
+   >>> ^D
+   [zenoss@mp4:/home/zenoss]: zenmodeler run -v10 -d mydev.zenoss.loc
+
+
+
+

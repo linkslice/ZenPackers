@@ -21,6 +21,7 @@ Topics for Zenpack Administration
    rrdtool
    3rd_party_licensing
    zenpack_release
+   4x_daemons
 
 Topics for Zenpack Development
 =============================================
@@ -31,6 +32,7 @@ This is the documentation for Inter-Galactic ZenPack Developers
    :maxdepth: 2
 
    events
+   collection
    gui_properties
    impact
    migration
@@ -38,6 +40,7 @@ This is the documentation for Inter-Galactic ZenPack Developers
    templating
    unit_testing
    zep
+   dummy
 
 Topics for ZenpackLib 
 =============================================
