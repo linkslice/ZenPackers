@@ -21,7 +21,7 @@ Jenkins
 
 Jenkins builds a Zenoss environment in order to test the Zenpacks at build time.
 This means that it does have a live version of Zenoss to test against.
-At this time however, Jenkins is lazy (not configured) and can't test Unit Tests..
+At this time however, Jenkins is not configured to probe Unit Tests..
 You will have to test them manually (see below)
 
 Manual Testing

@@ -269,11 +269,15 @@ data sources. That means the datapoints must match the keys exactly.
   - CoreLimit
   - MemoryLimit   
 
-ZPL Details Rendering 
+ZPL Details Auto-Rendering 
 ----------------------------------------------------
-| Thu May 29 16:01:30 CDT 2014
++------------------------------+
+| Thu May 29 16:01:30 CDT 2014 |
++------------------------------+
+
 You can now use the same rendering in the details that are used elsewhere.
-In your __init__.py you see this in the class properties:
+In your __init__.py you set the *renderer*  property in the class properties
+section:
 
 .. code-block:: python
    :emphasize-lines: 11,14
@@ -298,3 +302,8 @@ In your __init__.py you see this in the class properties:
         },
         ... etc ...
     }
+
+The ZPL will take care of setting this renderer whereever those variables
+are used.
+
+Ref: https://github.com/zenoss/ZenPacks.zenoss.OpenStack
