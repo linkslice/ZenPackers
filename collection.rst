@@ -1,11 +1,17 @@
 ========================================================================
-Collectors and Custom Parsers
+Custom Collectors and Custom Parsers
 ========================================================================
 
 Collecting data is the fundamental goal of Zenoss. This section explores
 specific tasks related to data collection and parsing that data.
 
-.. image:: _static/zenoss_collector.png
+.. figure:: _static/zenoss_collector.png
+    :align: center
+    :height: 400px
+    :alt: Zenoss Collector Subsystem
+    :figclass: align-center
+
+    Zenoss Collector Subsystem
 
 Prerequisites
 ------------------------------------------------------------------------------
@@ -41,7 +47,7 @@ Debugging Tips in General
     cd /opt/zenoss/Products/ZenHub/services
     python CommandPerformanceConfig.py -d mp1.zenoss.loc
 
-Generalities
+General Background Information
 ------------------------------------------------------------------------
 
 Collection process has the following steps:
@@ -71,8 +77,8 @@ Collection process has the following steps:
 
 Ref: http://docs.huihoo.com/zenoss/dev-guide/2.4.2/ch12s05.html
 
-Collectors
-###########
+Collectors/Pollers
+###################
 
 Collection can happen with a native plugin like [ssh, snmp, ping, https, etc.] or a
 custom plugin that you create. The output can come back in several formats like
@@ -84,9 +90,29 @@ collector/plugin information is passed to Zenhub, it must be an exectuable
 program or script.
 
 An example of a custom poller that outputs JSON is shown below.
-The example is pilfered from ZenPacks.zenoss.DB2:
+The example is pilfered from ZenPacks.zenoss.DB2. Note the following:
+
+* The poller is self-contained and self-calling. There are no *magic* functions
+  that Zenoss calls automatically.
+
+* The poller can import from global and local modules
+
+* You normally setup your plugins in your __init__.py so that they
+  have proper scope and permissions at installation.
+
+* In your *Monitoring Templates* setup, you must use the
+  "COMMAND" type for this datasource.
+
+* When you specify the datasource command, you will have to specifiy the
+  **full** path (using TALES) to the poller. For example:
+  ${here/ZenPackManager/packs/ZenPacks.zenoss.DB2/path}/poll_db2.py
+  
+* See the PostgreSQL, DB2, and DatabaseMonitor zenpacks for more examples.
+
 
 .. code-block:: python
+   :linenos:
+   :emphasize-lines: 4
 
    #!/usr/bin/env python
    import sys
@@ -135,11 +161,101 @@ The example is pilfered from ZenPacks.zenoss.DB2:
         poller = db2Poller(connectionString, query)
         poller.printJSON()
 
-Note that you must normally setup your plugins in you __init__.py so that they
-have proper scope and permissions. See the ZenPacks.zenoss.DB2 setup for example.
+Custom Parsers
+##############
 
-Collection
-###########
+The *parser* is invoked after a successful collection has occured.
+If you are not using one of the standard parsers like [Nagios, Cacti, JSON],
+then you must create your own custom parser.
 
+Custom parsers usually are located in the *$ZP_DIR/parsers* folder. Whatever parser
+you create can only be used when configured for the *datasource* (for your
+device) in the **Monitoring Templates** area. This information is typically
+stored in the *$ZP_DIR/objects/objects.xml* file. 
 
+Our example is from the DatabaseMonitor zenpack (OracleDB):
+
+* Starting on line 10 we see the *processResults()* method definition.
+* On line 13, we try to determine if the returned data is valid data.
+* On line 38, we start to process the validated data
+* At 55, we return results determined by status returned from probed targets
+* Finally on line 69, we update our datapoints.
+
+.. code-block:: python
+   :emphasize-lines: 10,13,38,55,69
+   :linenos:
+
+   # --------------------------------------------------------------------------
+   # File: $ZP_DIR/parsers/tablespaces.py -------------------------------------
+   # --------------------------------------------------------------------------
+   import json
+
+   from Products.ZenRRD.CommandParser import CommandParser
+   from ZenPacks.zenoss.DatabaseMonitor.lib import locallibs
+
+   class tablespace(CommandParser):
+       def processResults(self, cmd, result):
+
+        data = None
+        try:
+            data = json.loads(cmd.result.output)
+            # Auto-clear if possible
+            result.events.append({
+                'severity': 0,
+                'summary': 'Command parser status',
+                'eventKey': 'tablespace.parser.key',
+                'eventClassKey': 'tablespace.parse.class',
+                'component': cmd.component,
+                })
+        except Exception, ex:
+            result.events.append({
+                'severity': cmd.severity,
+                'summary': 'Command parser status',
+                'eventKey': 'tablespace.parser.key',
+                'eventClassKey': 'tablespace.parse.class',
+                'command_output': cmd.result.output,
+                'component': cmd.component,
+                'exception': str(ex),
+                })
+
+            return result
+
+        # Data is a list of dict: Iterate over them to find the right row
+        tbsp = None
+        for row in data:
+            if tbsp is not None:
+                break
+
+            inst_name = row['INSTANCE_NAME']
+            tbsp_name = row['TABLESPACE_NAME']
+            component_id = '{0}_{1}'.format(inst_name, tbsp_name)
+
+            # Select the correct row here. Break when found. Set Status
+            if component_id == cmd.component:
+                tbsp = row
+
+                # If the TS reports an error, mark it as Critical.
+                ts_message = 'Tablespace Status is: %s' % tbsp['ONLINE_STATUS']
+
+                severity = locallibs.tbsp_status_map(tbsp['ONLINE_STATUS'])
+
+                result.events.append({
+                    'severity': severity,
+                    'summary': ts_message,
+                    'eventKey': 'tablespace.status.Key',
+                    'eventClassKey': 'oracle.tablespace.ClassKey',
+                    'eventClass': "/Status",
+                    'component': component_id,
+                    })
+
+                break    # Break the "for row" , component found.
+
+        #----------------------------------------------------------------------
+        # Update/Filter on all datapoints. No need to check for non-numericals.
+        #----------------------------------------------------------------------
+        for point in cmd.points:
+            if tbsp and point.id in tbsp:
+                result.values.append((point, tbsp[point.id]))
+
+        return result
 

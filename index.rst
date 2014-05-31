@@ -32,11 +32,11 @@ This is the documentation for Inter-Galactic ZenPack Developers
    :maxdepth: 2
 
    events
-   collection
    gui_properties
    impact
    migration
    modeling
+   collection
    templating
    unit_testing
    zep
