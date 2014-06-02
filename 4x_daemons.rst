@@ -1,4 +1,4 @@
-16 Zenoss 4.X Core Daemons – InComplete List of all ZenOSS Process
+16 Zenoss 4.X Core Daemons – Incomplete List
 ==================================================================
 
 Zenoss Core has lot of daemons that can be used for various purpose.
@@ -14,7 +14,6 @@ requirement.
 
 1. zeneventserver
 ~~~~~~~~~~~~~~~~~
-
 In Zenoss 3.X the event processing was managed by zenhub daemon
 because of that there was bottleneck in event processing which has
 caused some performance related issues, so to avoid that in Zenoss 4.x
@@ -66,17 +65,15 @@ Once we start zeneventserver we can see the queue count get back to ‘0’
 
 2. zenhub
 ~~~~~~~~~
-
 zenhub daemon is written in python. Event processing gets triggered when
 zenhub daemon gets data from other daemons. In paid version zenoss has
 included invalidation worker process for better performance. In
-distributed zenoss architecture we normally deploy a Linux VM and which
-will be running zenhub daemon only. It’s the central point of failure of
+distributed zenoss architecture we normally deploy a Linux VM which
+runs a dedicated zenhub daemon only. It’s the single point of failure of
 events getting displayed in zenoss.
 
 3. zenping
 ~~~~~~~~~~
-
 zenping daemon does normal ping on interface and the polling interval is
 one-minute. If the interface is down zenoss generate an alert with
 critical severity. If the interface comes up zenoss automatically clears
@@ -88,15 +85,14 @@ debugging.
 
 ::
 
-    zenping –d x.x.x.x –v10
+    zenping –d 3.14.1.59 –v10
 
 4. zeneventd
 ~~~~~~~~~~~~
-
-zeneventd daemon has a major role in applying transforms [Python code
+zeneventd daemon has a major role in applying (event) transforms [Python code
 written to manipulate events]. Daemon fetches incoming events from
-zenoss.queues.zep.rawevents queue and applies transform add necessary
-device context such as Device group/Device State
+zenoss.queues.zep.rawevents queue and applies transform add necessary device
+context such as Device group/Device State
 [Production/Development] and some event related information such as
 [last seen, first seen] time of event. If the daemon stops running, we
 could see size of rawevents queue getting increased. We can debug
@@ -119,17 +115,15 @@ inside the code which will be printed in ‘/opt/zenoss/log/zeneventd.log’
     zenoss.queues.zep.signal                0
     ...done.
 
-    # zeneventd run –d x.x.x.x –v10 
+    # zeneventd run –d 3.14.1.59 –v10 
 
 5. zensyslog
 ~~~~~~~~~~~~
-
 zensyslog daemon process syslog messages [/var/log/messages] that are
 received from monitored device on to zenoss on port UDP/514.
 
 6. zenprocess
 ~~~~~~~~~~~~~
-
 | zenprocess daemon, process monitoring capability is integrated to
 | zenoss by using HOST-RESOURCES MIB which get loaded into zenoss as part
 | of default installation. zenprocess uses snmp table and get process
@@ -142,17 +136,15 @@ received from monitored device on to zenoss on port UDP/514.
 
 ::
 
-    zenprocess run –d x.x.x.x –v10
+    zenprocess run –d 3.14.1.59 –v10
 
 7. zenstatus
 ~~~~~~~~~~~~
-
 zenstatus daemon monitors TCP/UDP services that are available on the
 device such as [http/https/net-bios/].
 
 8. zentrap
 ~~~~~~~~~~
-
 zentrap daemon process the incoming traps that are send from hardware on
 port UDP/162. The daemon decodes the incoming trap to a format that is
 understandable by zenoss [Python dictionary format] and handover to
@@ -160,7 +152,6 @@ zeneventd for further processing and to generate events.
 
 9. zenactiond
 ~~~~~~~~~~~~~
-
 zenactiond daemon the daemon interact with signal queue in Rabbitmq and
 trigger notification via Email/Paging/etc. Signal queue get piled up if
 this daemon stops running.
@@ -183,7 +174,6 @@ this daemon stops running.
 
 10. zenperfsnmp
 ~~~~~~~~~~~~~~~
-
 zenperfsnmp daemon collects performance metrics such as CPU, Memory,
 File system Usage via snmpwalk and store the information in RRD [Round
 Robin Database] files, the data collection interval is 300 sec by
@@ -193,7 +183,7 @@ in debug mode against a single device.
 
 ::
 
-    zenperfsnmp run –d x.x.x.x –v10 
+    zenperfsnmp run –d 3.14.1.59 –v10 
 
 11. zencommand
 ~~~~~~~~~~~~~~
@@ -209,23 +199,22 @@ net-snmp on client device.
 
 ::
 
-    zencommand run –d x.x.x.x –v10
+    zencommand run –d 3.14.1.59 –v10
 
 12. zenmodeler
 ~~~~~~~~~~~~~~
-
 zenmodeler daemon gets initial device information such as
-interfaces/filesystem/ipservices etc. The daemon polling interval is
-12hrs by default. It mainly detects configuration changes that happen on
-device eg: Additional interface gets added, new partition etc.
+interfaces/filesystem/ipservices etc. It collects structural and topological
+data as well. The daemon polling interval is 12hrs by default. It mainly
+detects configuration changes that happen on device eg: Additional interface
+gets added, new partition etc.
 
 ::
 
-    zenmodeller run –d x.x.x.x –v10
+    zenmodeller run –d 3.14.1.59 –v10
 
 13. zenrrdcached
 ~~~~~~~~~~~~~~~~
-
 zenrrdcached daemon is a performance enhancer, helps to cache RRD
 metrics in the memory, which is used to generate graphs in zenoss. If
 the daemon fails to fetch the metrics from the memory it will get the
@@ -233,7 +222,6 @@ metrics from rrd files that is stored in the file system.
 
 14. zopectl
 ~~~~~~~~~~~
-
 zopectl daemon is call zopeclient, used while developing zenpack. To
 reflect the code change that we make during zenpack development this
 daemon need to be restarted.
@@ -244,7 +232,6 @@ daemon need to be restarted.
 
 15. zenjobs
 ~~~~~~~~~~~
-
 zenjobs daemon run background tasks like discovering network or adding
 device these tasks gets added to queue and zenjobs process them. Once a
 device gets added successfully [Discovered] modeling happens with the
@@ -253,7 +240,6 @@ devices in a bulk we use zenbatchload command utility.
 
 16. zenrdis
 ~~~~~~~~~~~
-
 zenrdis daemon is used to collect distributed ping-tree data from
 collector to build a complete map.
 

@@ -17,11 +17,11 @@ Topics for Zenpack Administration
    cli_monitoring
    databases
    attribute_errors
-   zenwipe
    rrdtool
    3rd_party_licensing
    zenpack_release
    4x_daemons
+   zenwipe
 
 Topics for Zenpack Development
 =============================================
@@ -52,15 +52,25 @@ Documentation for ZenPackLib
 
    zpl_intro
 
+Topics for ControlPlane (ControlCenter) 
+=============================================
+
+Documentation for ZenPackLib 
+
+.. toctree::
+   :maxdepth: 2
+
+   controlplane/index
+
 Pythonic Topics:
 ================
 
-Some advanced Python docs not specific to Zenoss
+Some Useful Python Topics 
    
 .. toctree::
    :maxdepth: 2
 
-   regex_by_key
+   pythonic/index
 
 Other Topics:
 ==============

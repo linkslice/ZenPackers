@@ -14,5 +14,6 @@ This includes a full purge of:
 You can get it at 
 https://dev.zenoss.com/tracint/browser/branches/core/zenoss-4.x/inst/zenwipe.sh  
 
+You can also selectively purge single items by editing the script.
    
 

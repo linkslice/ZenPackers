@@ -264,7 +264,11 @@ Here is the workflow in a nutshell:
 * Make your pull request
 * Ask for a review
 * That reveiwer then **merges** your changes into develop
-* Finsh your feature locally: Everything on Github is cleaned up for you.
+* Finsh your feature locally: 
+
+  - Using git push.default=simple: Everything on Github is cleaned up for you.
+  - Otherwise: After finishing, remove the feature repo in Github
+  - man git-config: /push.default for more details
 
 
 

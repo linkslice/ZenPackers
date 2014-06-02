@@ -67,11 +67,11 @@ Collection process has the following steps:
 .. math:: 
 
   \begin{array}{ccccc}
-   HOST_a    &                       &Collect(targets)&\xrightarrow{a} & (Results) \\
-  \downarrow &                       & \uparrow_a     &                & \downarrow \\
-  \fbox{ZC/ZP}&^a_b\rightleftharpoons&\fbox{Zenhub}   &\xleftarrow[b]{}& (Parser,  \\
-  \downarrow_b&                      &                &                &  Result)  \\
-  \fbox{ZODB}&                       &                &                &            \\
+   HOST_a    &                       &Collect(targets)&\xrightarrow{a} & (Results)        \\
+  \downarrow &                       & \uparrow_a     &                & \downarrow       \\
+  \fbox{ZC/ZP}&^a_b\rightleftharpoons&\fbox{Zenhub}   &\xleftarrow[b]{}& (Parser, Result) \\
+  \downarrow_b&                      &                &                &                  \\
+  \fbox{ZODB}&                       &                &                &                  \\
   \end{array}
 
 
