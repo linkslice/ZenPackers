@@ -53,7 +53,7 @@ your Event.log::
   error: [Errno 104] Connection reset by peer
 
 This indicates that RabbitMQ's internal setup has been corrupted. RabbitMQ does
-not have a simple configuration file you can tweek. It must be fixed by setting
+not have a simple configuration file you can tweak. It must be fixed by setting
 environment variables and then re-started. Its been rumored that even changing
 the hostname can make the Rabbit barf... This is becuase RabbitMQ names the
 database folders with the hostname.
